@@ -1,0 +1,32 @@
+name: Request a feature
+description: Request a new feature or change in this project
+labels: []
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What do you want?
+      description: Focus on the feature, not the technical approach or solution.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why do you want this?
+      description: Make a case for why your request should be considered. For instance, are you a GitHub Sponsor?
+    validations:
+      required: true
+  - type: textarea
+    id: approach
+    attributes:
+      label: Recommended approach
+      description: If you are aware of one, share your preferred solution here
+    validations:
+      required: true
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Share any other context you feel is relevant or adds to your case.
+    validations:
+      required: true

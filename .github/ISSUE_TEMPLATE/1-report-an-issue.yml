@@ -1,0 +1,82 @@
+name: Report an issue
+description: Typically these would be used to create a report to help us improve
+labels: []
+body:
+  - type: checkboxes
+    id: pre-checks
+    attributes:
+      label: My actions before raising this issue
+      description: Get help fast by ensuring your issue isn't covered elsewhere
+      options:
+        - label: Searched [current & past issues](.?q=is%3Aissue%20)
+          required: true
+  - type: dropdown
+    id: sponsors
+    attributes:
+      label: Are you a GitHub Sponsor (Yes/No?)
+      description: Sponsorship makes a real difference in creating time for focussing on issues 
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behaviour
+      description: Tell us what should be happening.
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current Behaviour
+      description: Tell us what is happening instead of the expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: What are the steps to reproduce?
+      description: Provide a link to a live example, or an unambiguous set of steps to reproduce this bug. 
+    validations:
+      required: true
+  - type: textarea
+    id: workaround
+    attributes:
+      label: List Possible Solutions and Workarounds
+      description: Suggest a fix/reason for the bug, or implementation ideas, or workarounds which could avoid making changes.
+    validations:
+      required: true
+  - type: textarea
+    id: recommend
+    attributes:
+      label: Which Solution Do You Recommend?
+      description: Of the suggested solutions which would you try first? 
+    validations:
+      required: true
+  - type: textarea
+    id: additional
+    attributes:
+      label: Context
+      description: Any additional context such as how this is affecting you or could affect other users.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Operating System and version
+      description: "Operating System and version (e.g. Linux, Windows, MacOS)"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: K3sup Version 
+      description: "Full output from: `k3sup version`"
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Example code
+      description: "link to GitHub repo or gist to reproduce problem"
+    validations:
+      required: true
