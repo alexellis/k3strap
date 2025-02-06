@@ -364,7 +364,6 @@ func connectOperator(user string, address string, sshKeyPath string) (*operator.
 		var sshAgentAuthMethod ssh.AuthMethod
 		sshAgentAuthMethod, initialSSHErr = sshAgentOnly()
 		if initialSSHErr == nil {
-
 			config := &ssh.ClientConfig{
 				User:            user,
 				Auth:            []ssh.AuthMethod{sshAgentAuthMethod},
@@ -372,6 +371,8 @@ func connectOperator(user string, address string, sshKeyPath string) (*operator.
 			}
 
 			sshOperator, initialSSHErr = operator.NewSSHOperator(address, config)
+		} else {
+			fmt.Printf("Unable to load key from ssh-agent: %w", initialSSHErr)
 		}
 	} else {
 		initialSSHErr = errors.New("ssh-agent unsupported on windows")
