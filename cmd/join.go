@@ -59,6 +59,8 @@ func MakeJoin() *cobra.Command {
 	command.Flags().String("server-user", "root", "Server username for SSH login (Default to --user)")
 
 	command.Flags().String("ssh-key", "~/.ssh/id_rsa", "The ssh key to use for remote login")
+	command.Flags().String("server-ssh-key", "", "The ssh key of an existing k3s server")
+
 	command.Flags().Int("ssh-port", 22, "The port on which to connect for ssh")
 	command.Flags().Int("server-ssh-port", 22, "The port on which to connect to server for ssh (Default to --ssh-port)")
 	command.Flags().Bool("skip-install", false, "Skip the k3s installer")
@@ -154,6 +156,11 @@ func MakeJoin() *cobra.Command {
 		}
 
 		sshKey, _ := command.Flags().GetString("ssh-key")
+		serverSshKey, _ := command.Flags().GetString("server-ssh-key")
+		if len(serverSshKey) == 0 {
+			serverSshKey = sshKey
+		}
+
 		server, err := command.Flags().GetBool("server")
 		if err != nil {
 			return err
@@ -196,11 +203,12 @@ func MakeJoin() *cobra.Command {
 			sudoPrefix = "sudo "
 		}
 		sshKeyPath := expandPath(sshKey)
+		serverSshKeyPath := expandPath(serverSshKey)
 
 		if len(nodeToken) == 0 {
 			address := fmt.Sprintf("%s:%d", serverHost, serverPort)
 
-			sshOperator, sshOperatorDone, errored, err := connectOperator(serverUser, address, sshKeyPath)
+			sshOperator, sshOperatorDone, errored, err := connectOperator(serverUser, address, serverSshKeyPath)
 			if errored {
 				return err
 			}
