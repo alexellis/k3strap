@@ -17,6 +17,7 @@ func main() {
 	cmdReady := cmd.MakeReady()
 	cmdPlan := cmd.MakePlan()
 	cmdNodeToken := cmd.MakeNodeToken()
+        cmdReset := cmd.MakeReset()
 
 	printk3supASCIIArt := cmd.PrintK3supASCIIArt
 
@@ -58,6 +59,7 @@ func main() {
 	rootCmd.AddCommand(cmdReady)
 	rootCmd.AddCommand(cmdPlan)
 	rootCmd.AddCommand(cmdNodeToken)
+        rootCmd.AddCommand(cmdReset)
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
