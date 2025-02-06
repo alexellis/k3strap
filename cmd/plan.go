@@ -10,7 +10,7 @@ import (
 )
 
 func MakePlan() *cobra.Command {
-	var command = &cobra.Command{
+	command := &cobra.Command{
 		Use:   "plan",
 		Short: "Plan an installation of K3s.",
 		Long: `Generate a bash script or plan of installation commands for K3s for a 
@@ -37,6 +37,8 @@ Examples JSON input file:
 
 	command.Flags().Int("servers", 3, "Number of servers to use from the devices file")
 	command.Flags().String("local-path", "kubeconfig", "Where to save the kubeconfig file")
+	command.Flags().Bool("merge", false, `Merge the config with existing kubeconfig if it already exists.
+Provide the --local-path flag with --merge if a kubeconfig already exists in some other directory`)
 	command.Flags().String("context", "default", "Name of the kubeconfig context to use")
 	command.Flags().String("user", "root", "Username for SSH login")
 
@@ -51,7 +53,6 @@ Examples JSON input file:
 	command.Flags().Int("limit", 0, "Maximum number of nodes to use from the devices file, 0 to use all devices")
 
 	command.RunE = func(cmd *cobra.Command, args []string) error {
-
 		if len(args) == 0 {
 			return fmt.Errorf("give a path to a JSON file containing a list of devices")
 		}
@@ -75,6 +76,7 @@ Examples JSON input file:
 
 		servers, _ := cmd.Flags().GetInt("servers")
 		kubeconfig, _ := cmd.Flags().GetString("local-path")
+		merge, _ := cmd.Flags().GetBool("merge")
 		contextName, _ := cmd.Flags().GetString("context")
 		user, _ := cmd.Flags().GetString("user")
 		tlsSan, _ := cmd.Flags().GetString("tls-san")
@@ -113,6 +115,12 @@ Examples JSON input file:
 --k3s-extra-args "%s"`, agentK3sExtraArgs)
 		}
 
+		mergeStr := ""
+		if merge {
+			mergeStr = ` \
+--merge`
+		}
+
 		for i, host := range hosts {
 			if serversAdded == 0 {
 
@@ -123,7 +131,7 @@ Examples JSON input file:
 --user %s \
 --cluster \
 --local-path %s \
---context %s%s%s%s
+--context %s%s%s%s%s
 `,
 					host.IP,
 					user,
@@ -131,7 +139,8 @@ Examples JSON input file:
 					contextName,
 					tlsSanStr,
 					serverExtraArgsSt,
-					sshKeySt)
+					sshKeySt,
+					mergeStr)
 
 				script += fmt.Sprintf(`
 echo "Fetching the server's node-token into memory"
