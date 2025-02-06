@@ -5,6 +5,7 @@ import (
 	"net"
 	"os"
 	"path"
+	"strconv"
 	"strings"
 
 	"github.com/alexellis/k3sup/pkg"
@@ -101,7 +102,7 @@ server or agent to join the cluster.
 		dataDir, _ := command.Flags().GetString("server-data-dir")
 
 		sshKeyPath := expandPath(sshKey)
-		address := fmt.Sprintf("%s:%d", host, port)
+		address := net.JoinHostPort(host, strconv.Itoa(port))
 		if !local {
 			fmt.Fprintf(os.Stderr, "Remote: %s\n", address)
 		}

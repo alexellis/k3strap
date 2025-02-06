@@ -9,6 +9,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 
 	"github.com/alexellis/k3sup/pkg"
@@ -294,7 +295,7 @@ Provide the --local-path flag with --merge if a kubeconfig already exists in som
 		sshKey, _ := command.Flags().GetString("ssh-key")
 
 		sshKeyPath := expandPath(sshKey)
-		address := fmt.Sprintf("%s:%d", host, port)
+		address := net.JoinHostPort(host, strconv.Itoa(port))
 
 		sshOperator, sshOperatorDone, errored, err := connectOperator(user, address, sshKeyPath)
 		if errored {
