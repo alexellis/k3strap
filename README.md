@@ -599,6 +599,31 @@ Now where next? I would recommend my detailed tutorial where I spend time lookin
 
 Try it now: [Will it cluster? K3s on Raspbian](https://blog.alexellis.io/test-drive-k3s-on-raspberry-pi/)
 
+## IPv6 only clusters
+
+You will need to use a proxy to install k3s, because github.com doesn't have a IPv6 address and k3s binaries are hosted there.
+
+[One easy solution](https://danwin1210.de/github-ipv6-proxy.php) to this problem is to add this to your /etc/hosts file:
+
+```
+2a01:4f8:c010:d56::2 github.com
+2a01:4f8:c010:d56::3 api.github.com
+2a01:4f8:c010:d56::4 codeload.github.com
+2a01:4f8:c010:d56::5 objects.githubusercontent.com
+```
+
+Once you proxied your requests for github.com, make sure you bracket the ip, for example [2606:4700:4700::1111], and use `--host` `--server-host`, instead of `--ip` or `--server-ip`.
+
+Example k3sup install on a IPv6 only cluster:
+```sh
+k3sup install --host [2606:4700:4700::1001] --user root --k3s-extra-args '--flannel-ipv6-masq'
+```
+
+Example k3sup join on a IPv6 only cluster:
+```sh
+k3sup join --host [2606:4700:4700::1111] --server-host [2606:4700:4700::1001] --user root
+```
+
 ## Caveats on security
 
 If you are using public cloud, then make sure you see the notes from the Rancher team on setting up a Firewall or Security Group.
